@@ -14,13 +14,12 @@ PATH_PROJECT_MODELS = Path.joinpath(PATH_PROJECT_DIR, 'models')
 PATH_PROJECT_REPORTS = Path.joinpath(PATH_PROJECT_DIR, 'reports')
 PATH_PROJECT_FIGURES = Path.joinpath(PATH_PROJECT_DIR, 'reports', 'figures')
 PATH_PROJECT_TABULAR_METRICS = Path.joinpath(PATH_PROJECT_DIR, 'reports','tabular','metrics')
-PATH_PROJECT_TABULAR_FIGURES= Path.joinpath(PATH_PROJECT_DIR, 'reports','tabular','figures')
-PATH_PROJECT_REPORTS_SIGNAL= Path.joinpath(PATH_PROJECT_DIR, 'reports','time series')
+PATH_PROJECT_TABULAR_FIGURES = Path.joinpath(PATH_PROJECT_DIR, 'reports','tabular','figures')
+PATH_PROJECT_REPORTS_SIGNAL = Path.joinpath(PATH_PROJECT_DIR, 'reports','time_series','metrics')
 PATH_PROJECT_TEXT_METRICS = Path.joinpath(PATH_PROJECT_DIR, 'reports','text')
 PATH_PROJECT_FS_METRICS = Path.joinpath(PATH_PROJECT_DIR, 'reports','FS')
 PATH_PROJECT_FUSION_METRICS = Path.joinpath(PATH_PROJECT_DIR, 'reports','fusion','metrics')
 PATH_PROJECT_FUSION_FIGURES = Path.joinpath(PATH_PROJECT_DIR, 'reports','fusion','figures')
-
 
 BBDD_HYPO = 'hypo'
 BBDD_ID_HYPO_LIFESTYLE = 'BDemoLifeDiabHxMgmt'
@@ -34,5 +33,4 @@ BBDD_HYPO_FEAR = 'fear'
 BBDD_HYPO_CGM = 'BDataCGM'
 BBDD_ID_HYPO_UNAWARE = 'BHypoUnawareSurvey'
 BBDD_HYPO_UNAWARE = 'unaware'
-BBDD_HYPO_LABEL = 'BPtRoster'
 BBDD_HYPO_LABEL = 'BPtRoster'
