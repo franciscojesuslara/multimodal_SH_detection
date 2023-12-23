@@ -17,6 +17,7 @@ from sklearn.svm import SVC
 import utils.consts as consts
 from utils.Embedding_text import Embedded_text
 
+
 def main_function(df_data, var_name='raw_medcon', encoding='tfidf', classifiers='lasso', ngrams=1, embedding_size=50,
                   Reduction='None',kernelKPCA='rbf',FS=False, path=''):
     y_label=df_data['label_encoded']
