@@ -29,7 +29,7 @@ python src/main.py --type_data='unimodal' --type_modality='time_series'
 
 For results using text:
 ```console
-python src/main.py --type_data='unimodal' --type_modality='time_series'
+python src/main.py --type_data='unimodal' --type_modality='text'
 ```
 
 ## To obtain results of models using multi-modality data
