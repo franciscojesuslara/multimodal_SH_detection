@@ -1,11 +1,11 @@
-from text.Embeddings_functions import Embeddings
 import utils.consts as consts
 import pandas as pd
 import os
-from utils.check_patients import  get_patients_id
+from utils.check_patients import get_patients_id
+from text.embeddings_functions import Embeddings
 
 
-#CONDITIONS
+# medical conditions
 def conditions_unimodal():
     path1= os.path.join(consts.PATH_PROJECT_TEXT_METRICS, 'Conditions')
     df = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_TEXT, 'bbdd_medconditions2.csv'))

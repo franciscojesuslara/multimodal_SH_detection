@@ -1,17 +1,23 @@
-import utils.consts as consts
-import pandas as pd
 import os
+import pandas as pd
 import matplotlib.pyplot as plt
 from utils.plotter import lollipop_plot
 from text.text_unimodal import conditions_unimodal, medications_unimodal
 from fusion.fusion_functions import early_fusion_approaches, late_train_test_creation, late_fusion_main
 from ts.timeseries import CGM_preprocessing
+import utils.consts as consts
 from utils.FS_bbdd import relief_bbdd
-from src.utils.classifiers import call_clfs
-from src.Tabular_unimodal import tabular_classification
+from utils.classifiers import call_clfs
+from Tabular_unimodal import tabular_classification
 from text.frequency import frequency_text_bbdds
-from ts.Series_representation_esax_2 import gSAX_application,Signal_FS,plot_freq_TS
+from ts.Series_representation_esax_2 import gSAX_application, Signal_FS, plot_freq_TS
 import argparse
+import coloredlogs
+import logging
+
+
+logger = logging.getLogger(__name__)
+coloredlogs.install(level='DEBUG', logger=logger)
 
 
 def parse_arguments(parser):
@@ -25,10 +31,12 @@ def parse_arguments(parser):
 parser = argparse.ArgumentParser(description='Obtain results.')
 args = parse_arguments(parser)
 
-# Models using unimodal data
+logger.info(args.type_data)
+logger.info(args.type_modality)
 
 if args.type_data == 'unimodal':
     if args.type_modality == 'tabular':
+        logger.info('Trained models for tabular data')
         features_selected = []
         databases_list = ['Unaware', 'Fear', 'BTOTSCORE', 'MOCA', 'Lifestyle',
                           'BSample', 'Attitude', 'Depression']
@@ -37,6 +45,7 @@ if args.type_data == 'unimodal':
 
         tabular_classification(databases_list, paths=consts.PATH_PROJECT_TABULAR_METRICS)
         tabular_classification(databases_list, features_selected=FS, paths=consts.PATH_PROJECT_TABULAR_METRICS)
+
     elif args.type_modality == 'time_series':
         CGM_preprocessing()
         df = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_CGM.csv'))

@@ -1,13 +1,12 @@
-
+import pandas as pd
 import esax.get_motif as mot
 import esax.get_subsequences as subs
-import utils.consts as consts
 from utils.plotter import lollipop_plot
 from src.utils.classifiers import *
 from src.utils.check_patients import get_patients_id
 from sklearn.model_selection import train_test_split
-import pandas as pd
 from utils.FS_bbdd import relief_bbdd
+
 
 def get_ecdf(data):
     """
@@ -218,13 +217,12 @@ def plot_freq_TS():
     # names = df1.columns.tolist() + df2.columns.tolist() + df3.columns.tolist() + df4.columns.tolist() + df5.columns.tolist()
     # names = list(set(names))
 
-    P =  pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,
-                                         'TS_analysis_6_3_10_36.csv'))
-
+    P = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,
+                                  'TS_analysis_6_3_10_36.csv'))
 
     P['Difference in Number'] = P['Number in severe'] - P['Number in control']
     P['abs Difference in Number'] = abs(P['Difference in Number'] )
-    P=P.sort_values(by=['abs Difference in Number'])
+    P = P.sort_values(by=['abs Difference in Number'])
     df = P[-10:]
     x = [e.upper() for e in df['Word']]
     y = df['Difference in Number']

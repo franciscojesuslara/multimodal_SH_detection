@@ -296,7 +296,7 @@ def divide_period(df_ts):
     return first_period.reset_index(drop=True), second_period.reset_index(drop=True)
 
 def preprocess_raw_cgm():
-    df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_RAW,'Signal/BDataCGM.csv'),sep='|')
+    df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BDataCGM.csv'), sep='|')
     df_ts = create_sequence_by_columns(df_ts)
     df_ts=df_ts.sort_values(by=['PtID', 'sequence']).reset_index(drop=True)
 

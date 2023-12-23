@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 import nltk
 nltk.download('stopwords')
 nltk.download('punkt')
-from src.utils.evaluator import compute_classification_prestations
+from utils.evaluator import compute_classification_prestations
 from sklearn.linear_model import Lasso
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC

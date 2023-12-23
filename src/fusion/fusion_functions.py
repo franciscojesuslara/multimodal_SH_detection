@@ -3,8 +3,9 @@ import os
 from utils.Interpretability import call_clf_interpretability_SHAP
 from fusion.late import late_fusion, Meta_classifier
 from fusion.early import early_fusion, classifier_early
-import src.utils.consts as consts
+import utils.consts as consts
 import numpy as np
+
 def early_fusion_approaches():
     ### EARLY FUSION###
     print('** EARLY FUSION **')

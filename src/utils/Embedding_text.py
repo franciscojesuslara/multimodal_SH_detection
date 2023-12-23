@@ -1,6 +1,5 @@
-from utils.train_neural_text_models import w2vec_encoding,fasttext_encoding,preprocess_sentence
-import pandas as pd
 import os
+import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 from utils.FS_relief import FS_text_fuction
@@ -17,7 +16,9 @@ nltk.download('stopwords')
 nltk.download('punkt')
 import sent2vec
 import utils.consts as consts
+from utils.train_neural_text_models import w2vec_encoding,fasttext_encoding,preprocess_sentence
 # from text.Autoencoders import SAE_dim_reduction, AE_dim_reduction
+
 
 def mean_pooling(model_output, attention_mask):
     token_embeddings = model_output[0]  # First element of model_output contains all token embeddings

@@ -1,15 +1,15 @@
 from pathlib import Path
 
-SEEDS = [2,64,0,10,36]
+SEEDS = [2, 64, 0, 10, 36]
 
 PATH_PROJECT_DIR = Path(__file__).resolve().parents[2]
 PATH_PROJECT_DATA = Path.joinpath(PATH_PROJECT_DIR, 'data')
 PATH_PROJECT_DATA_RAW = Path.joinpath(PATH_PROJECT_DIR, 'data', 'raw')
 PATH_PROJECT_DATA_PREPROCESSED = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed')
-PATH_PROJECT_DATA_PREPROCESSED_SIGNAL = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed','time series')
-PATH_PROJECT_DATA_PREPROCESSED_TEXT = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed','text')
-PATH_PROJECT_DATA_PREPROCESSED_TABULAR = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed','tabular')
-PATH_PROJECT_DATA_PREPROCESSED_FUSION = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed','fusion')
+PATH_PROJECT_DATA_PREPROCESSED_SIGNAL = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed', 'time_series')
+PATH_PROJECT_DATA_PREPROCESSED_TEXT = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed', 'text')
+PATH_PROJECT_DATA_PREPROCESSED_TABULAR = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed', 'tabular')
+PATH_PROJECT_DATA_PREPROCESSED_FUSION = Path.joinpath(PATH_PROJECT_DIR, 'data', 'preprocessed', 'fusion')
 PATH_PROJECT_MODELS = Path.joinpath(PATH_PROJECT_DIR, 'models')
 PATH_PROJECT_REPORTS = Path.joinpath(PATH_PROJECT_DIR, 'reports')
 PATH_PROJECT_FIGURES = Path.joinpath(PATH_PROJECT_DIR, 'reports', 'figures')
