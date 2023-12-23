@@ -6,7 +6,6 @@ import matplotlib
 import pandas as pd
 import os
 import matplotlib.pyplot as plt
-import seaborn as sns
 def plot_auroc(fpr, tpr, roc_auc):
     plt.title('Receiver Operating Characteristic')
     plt.plot(fpr, tpr, 'b', label='AUC = %0.2f' % roc_auc)

@@ -11,13 +11,13 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.decomposition import PCA, KernelPCA
 from sklearn.model_selection import train_test_split
 from nltk import word_tokenize
-import umap
+# import umap
 import nltk
 nltk.download('stopwords')
 nltk.download('punkt')
 import sent2vec
 import utils.consts as consts
-from text.Autoencoders import SAE_dim_reduction, AE_dim_reduction
+# from text.Autoencoders import SAE_dim_reduction, AE_dim_reduction
 
 def mean_pooling(model_output, attention_mask):
     token_embeddings = model_output[0]  # First element of model_output contains all token embeddings
