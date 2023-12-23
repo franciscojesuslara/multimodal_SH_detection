@@ -16,7 +16,6 @@ import matplotlib.pyplot as plt
 import os
 import warnings
 warnings.filterwarnings('ignore')
-import pickle
 list_clfs = ['RandomForest', 'knn', 'dt', 'reglog', 'lasso']
 
 
@@ -75,17 +74,15 @@ def train_compute_metrics(classifier: str,
     elif classifier == 'RandomForest':
         
         lenght_train = x_train.shape[0]
-
-
         selected_clf = RandomForestClassifier(n_jobs=4, random_state=seed)
 
         param_grid = {
-
-            'n_estimators': [10,20,30],
+            'n_estimators': [10, 20, 30],
             'max_depth': range(2, 10, 1),
             # 'max_depth': range(2, 35, 5),
-            'criterion':['gini', 'entropy'],
-            'min_samples_split': range(2, 12,2)}
+            'criterion': ['gini', 'entropy'],
+            'min_samples_split': range(2, 12, 2)
+        }
         # 'min_samples_split': range(lenght_15_percent_val, lenght_20_percent_val)}
 
     return train_predict_clf(x_train, y_train, x_test, y_test, selected_clf, param_grid,partitions,SHAP=SHAP,ALE=ALE)
@@ -96,10 +93,12 @@ def train_predict_clf(x_train: np.array,
                       x_test: np.array,
                       y_test: np.array,
                       clf, param_grid,
-                      Partitions,SHAP=False,ALE=False) -> Tuple[float, float, float, float]:
+                      Partitions,
+                      SHAP=False,
+                      ALE=False) -> Tuple[float, float, float, float]:
 
-    print('xxxx', clf)
-    print('xxxx', param_grid)
+    print(clf)
+    print(param_grid)
 
     grid_cv = GridSearchCV(clf, param_grid=param_grid, scoring='roc_auc', cv=5, return_train_score=True)
     grid_cv.fit(x_train, y_train)
@@ -234,7 +233,7 @@ def train_several_clfs(clf_name, x_features, y_label,bbdd_name,features,test_s,t
     return list_dicts_metrics
 
 
-def call_clfs(x_features, y_label,bbdd_name,features,test_s,tfidf=20):
+def call_clfs(x_features, y_label, bbdd_name, features, test_s, tfidf=20):
 
     df_metrics = pd.DataFrame(columns=['model', 'metric', 'mean', 'std'])
 
@@ -243,7 +242,7 @@ def call_clfs(x_features, y_label,bbdd_name,features,test_s,tfidf=20):
 
         for dict_metric in list_metrics:
             # df_aux = {'model': clf_name, 'metric': 0, 'mean': 0, 'std': 0}f_metrics = df_metrics.append(dict_metric, ignore_index=True)
-            df_metrics =pd.concat([df_metrics ,pd.DataFrame(dict_metric,index=[0])])
+            df_metrics = pd.concat([df_metrics, pd.DataFrame(dict_metric, index=[0])])
     return df_metrics
 
 

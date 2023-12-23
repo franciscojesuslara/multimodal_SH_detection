@@ -13,6 +13,8 @@ import nltk
 import utils.consts as consts
 nltk.download('stopwords')
 nltk.download('punkt')
+
+
 def relief_plot(df_score,path_figure,name):
 
     if len(df_score['score_sum']) > 25:
@@ -72,6 +74,7 @@ def relief_plot(df_score,path_figure,name):
     fig.autofmt_xdate(rotation=45)
     plt.savefig(os.path.join(path_figure, 'diff_' + str(name)+'.png'))
     plt.show()
+
 def sum_score(df_score):
     df_score.columns = ['names', 'score0', 'score1', 'score2', 'score3', 'score4']
     val=['score0', 'score1', 'score2', 'score3', 'score4']
@@ -79,6 +82,7 @@ def sum_score(df_score):
     df_score['score_sum']=df_score[val].astype(float).T.mean()
     df_score.sort_values(by=['score_sum'], ascending=False, inplace=True)
     return df_score
+
 def relief_FS(X,Y,relief,i):
     relief.fit(X.values.astype(float), Y.values.astype(float))
     x_selected_features, list_selected_features_indices, scores_sorted = relief.transform(X.values)
@@ -88,6 +92,7 @@ def relief_FS(X,Y,relief,i):
                     scores_sorted.astype(float)]).T,
         columns=['names', column])
     return df
+
 def relief_bbdd(x_features, y_label,bbdd_name,test_s=0.2,FS=True,path=''):
     if 'PtID' in x_features.columns:
         x_features.drop(['PtID'], axis=1, inplace=True)
@@ -104,10 +109,10 @@ def relief_bbdd(x_features, y_label,bbdd_name,test_s=0.2,FS=True,path=''):
         except:
             df_score = df
 
-    df_score=sum_score(df_score)
+    df_score = sum_score(df_score)
 
     if type(FS) != int:
-        relief_plot(df_score,path,bbdd_name)
+        relief_plot(df_score, path, bbdd_name)
         plt.close()
     else:
         df_score.to_csv(os.path.join(path, 'FS_' + bbdd_name + '.csv'))

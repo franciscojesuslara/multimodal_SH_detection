@@ -339,8 +339,9 @@ df1,df2=preprocess_raw_cgm()
 # # plot_hist_glucose_days(df_ts, sequence_id='DeviceDaysFromEnroll', agg_func='count', flag_save_figure=False)
 # # plot_glucose_patients(df_ts, flag_save_figure=True)
 #
+
 def CGM_preprocessing():
-    df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_RAW,'Signal/BDataCGM.csv'),sep='|')
+    df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BDataCGM.csv'),sep='|')
     list_ids=df_ts['PtID'].unique().tolist()
     # for e in LIST_PATIENT_IDS_REMOVED:
     #     list_ids.remove(e)
@@ -364,7 +365,7 @@ def CGM_preprocessing():
                 id_removed.append(e)
             df_final = pd.concat([df_final, df_concat2[df_concat2['patient_id'] == e]])
     df_final = df_final[~df_final['patient_id'].isin(id_removed)]
-    df_final.to_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,'Time_series_CGM.csv'))
+    df_final.to_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_CGM.csv'))
 # print(df_concat)
 
 # print(df_ts_post)

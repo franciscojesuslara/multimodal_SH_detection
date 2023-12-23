@@ -4,8 +4,8 @@ import pandas as pd
 import utils.consts as cons
 
 
-def get_patients_id(databases_list=['Unaware', 'Fear', 'BTOTSCORE', 'BSample', 'Attitude', 'Lifestyle', 'MOCA', 'Depression',
-                     'Conditions', 'Medications', 'Signal']):
+def get_patients_id(databases_list=['Unaware', 'Fear', 'BTOTSCORE', 'BSample', 'Attitude', 'Lifestyle',
+                                    'MOCA', 'Depression', 'Conditions', 'Medications', 'Signal']):
     df_final = []
     for e in databases_list:
         if e == 'Attitude':
@@ -42,17 +42,17 @@ def get_patients_id(databases_list=['Unaware', 'Fear', 'BTOTSCORE', 'BSample', '
             df1 = pd.read_csv(os.path.join(cons.PATH_PROJECT_DATA_PREPROCESSED_TABULAR, 'bbdd_BSample.csv'))
             df_final.append(df1)
         elif e == 'Signal':
-            df1 = pd.read_csv(os.path.join(cons.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL , 'Time_series_Text.csv'))
+            df1 = pd.read_csv(os.path.join(cons.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_Text.csv'))
             df_final.append(df1)
 
     list1 = []
     for e in df_final:
         for i in e['PtID']:
             list1.append(i)
-    p=set(list1)
-    id=[]
-    id_removed=[]
-    n_removed=[]
+    p = set(list1)
+    id = []
+    id_removed = []
+    n_removed = []
     for e in p:
         if list1.count(e) == len(databases_list):
             id.append(e)

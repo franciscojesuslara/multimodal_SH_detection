@@ -2,8 +2,8 @@ import pandas as pd
 import esax.get_motif as mot
 import esax.get_subsequences as subs
 from utils.plotter import lollipop_plot
-from src.utils.classifiers import *
-from src.utils.check_patients import get_patients_id
+from utils.classifiers import *
+from utils.check_patients import get_patients_id
 from sklearn.model_selection import train_test_split
 from utils.FS_bbdd import relief_bbdd
 

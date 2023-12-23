@@ -4,10 +4,13 @@ import utils.consts as consts
 import os
 from utils.FS_bbdd import relief_bbdd
 from utils.classifiers import call_clfs
-def tabular_classification(databases_list,features_selected=[],paths=''):
+
+
+def tabular_classification(databases_list, features_selected=[], paths=''):
     patients = get_patients_id(
         ['Medications', 'Conditions', 'Fear', 'BTOTSCORE', 'BSample', 'Attitude', 'Lifestyle', 'MOCA', 'Depression',
          'Signal', 'Unaware'])
+
     for j, e in enumerate(databases_list[:-1]):
         if e == 'Attitude':
             df1 = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_TABULAR, 'bbdd_attitude.csv'))
@@ -49,7 +52,6 @@ def tabular_classification(databases_list,features_selected=[],paths=''):
             df1 = patients.merge(df1, on=['PtID'])
             # df1 = df1.sort_values('PtID')
 
-
         elif e == 'MOCA':
             df1 = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_TABULAR, 'bbdd_MOCA.csv'))
             df1 = patients.merge(df1, on=['PtID'])
@@ -71,8 +73,8 @@ def tabular_classification(databases_list,features_selected=[],paths=''):
         if len(features_selected) > 0:
             features = relief_bbdd(X, Y, e, test_s=0.2, FS=features_selected[j], path=paths)
             relief_bbdd(X, Y, e, test_s=0.2, FS='plot', path=paths)
-            df_metrics=call_clfs(X, Y, e, features, 0.2)
+            df_metrics = call_clfs(X, Y, e, features, 0.2)
             df_metrics.to_csv(os.path.join(paths, e+'_FS.csv'))
         else:
-            df_metrics=call_clfs(X, Y, e, X.columns, 0.2)
-        df_metrics.to_csv(os.path.join(paths,e+'.csv'))
+            df_metrics = call_clfs(X, Y, e, X.columns, 0.2)
+        df_metrics.to_csv(os.path.join(paths, e+'.csv'))
