@@ -100,7 +100,7 @@ def train_predict_clf(x_train: np.array,
     print(clf)
     print(param_grid)
 
-    grid_cv = GridSearchCV(clf, param_grid=param_grid, scoring='roc_auc', cv=5, return_train_score=True)
+    grid_cv = GridSearchCV(clf, param_grid=param_grid, scoring='roc_auc', cv=5, return_train_score=True, n_jobs=-1)
     grid_cv.fit(x_train, y_train)
 
     auc_knn_all_train = np.array(grid_cv.cv_results_['mean_train_score'])
