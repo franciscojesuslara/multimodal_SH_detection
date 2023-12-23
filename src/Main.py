@@ -15,14 +15,14 @@ from ts.Series_representation_esax_2 import gSAX_application,Signal_FS,plot_freq
 ### UNIMODAL CLASSIFICATION APPROACH##
 
 ##TABULAR DATA##
-databases_list=[]
-features_selected=[]
-path=consts.PATH_PROJECT_TABULAR_METRICS
-databases_list = ['Unaware', 'Fear', 'BTOTSCORE','MOCA', 'Lifestyle', 'BSample',
-                      'Attitude', 'Depression']
-FS = [9, 7, 2, 8, 11, 3, 4, 6, 4, 5, 4]
-tabular_classification(databases_list,paths=path)
-tabular_classification(databases_list,features_selected=FS,paths=path)
+# databases_list=[]
+# features_selected=[]
+# path=consts.PATH_PROJECT_TABULAR_METRICS
+# databases_list = ['Unaware', 'Fear', 'BTOTSCORE','MOCA', 'Lifestyle', 'BSample',
+#                       'Attitude', 'Depression']
+# FS = [9, 7, 2, 8, 11, 3, 4, 6, 4, 5, 4]
+# tabular_classification(databases_list,paths=path)
+# tabular_classification(databases_list,features_selected=FS,paths=path)
 # #
 # ##CGM##
 # CGM_preprocessing()
@@ -44,7 +44,7 @@ tabular_classification(databases_list,features_selected=FS,paths=path)
 # early_fusion_approaches()
 ## LATE FUSION
 # late_train_test_creation()
-# late_fusion_main()
+late_fusion_main()
 
 ## PLOTS
 # plot_freq_TS()
