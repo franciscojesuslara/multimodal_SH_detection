@@ -94,7 +94,7 @@ sentence-transformers==2.2.2
 sentencepiece==0.1.99
 shap==0.44.0
 six==1.16.0
-skrebate==0.62
+skrebate @ git+https://github.com/cdchushig/scikit-rebate.git@1efbe530a46835c86f2e50f17342541a3085be9c
 slicer==0.0.7
 smart-open==6.4.0
 spacy==3.7.2
