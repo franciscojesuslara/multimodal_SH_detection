@@ -340,9 +340,10 @@ df1,df2=preprocess_raw_cgm()
 # # plot_glucose_patients(df_ts, flag_save_figure=True)
 #
 
+
 def CGM_preprocessing():
-    df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BDataCGM.csv'),sep='|')
-    list_ids=df_ts['PtID'].unique().tolist()
+    df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BDataCGM.csv'), sep='|')
+    list_ids = df_ts['PtID'].unique().tolist()
     # for e in LIST_PATIENT_IDS_REMOVED:
     #     list_ids.remove(e)
 
@@ -351,21 +352,22 @@ def CGM_preprocessing():
 
     df_seqs_patients2 = select_glucose_days(df2, agg_func='count', max_records=700, n_seqs=5)
     df_concat2 = preprocess_cgm_new_freq(df2, df_seqs_patients2)
-    df_final=pd.DataFrame()
-    id_removed=[]
+    df_final = pd.DataFrame()
+    id_removed = []
+
     for e in list_ids:
-        if len(df_concat[df_concat['patient_id']== e]) > len(df_concat2[df_concat2['patient_id']== e]):
+        if len(df_concat[df_concat['patient_id'] == e]) > len(df_concat2[df_concat2['patient_id'] == e]):
             # print('id',e,': ','period1:',len(df_concat[df_concat['patient_id']== e]),'period2:',len(df_concat2[df_concat2['patient_id']== e]))
-            if len(df_concat[df_concat['patient_id']== e]) < 504:
+            if len(df_concat[df_concat['patient_id'] == e]) < 504:
                 id_removed.append(e)
-            df_final=pd.concat([df_final,df_concat[df_concat['patient_id']== e]])
+            df_final=pd.concat([df_final, df_concat[df_concat['patient_id'] == e]])
         else:
             # print('id',e,': ','period1:',len(df_concat[df_concat['patient_id']== e]),'period2:',len(df_concat2[df_concat2['patient_id']== e]))
-            if len(df_concat2[df_concat2['patient_id']== e]) < 504:
+            if len(df_concat2[df_concat2['patient_id'] == e]) < 504:
                 id_removed.append(e)
             df_final = pd.concat([df_final, df_concat2[df_concat2['patient_id'] == e]])
     df_final = df_final[~df_final['patient_id'].isin(id_removed)]
-    df_final.to_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_CGM.csv'))
+    df_final.to_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_Text.csv'))
 # print(df_concat)
 
 # print(df_ts_post)

@@ -53,15 +53,17 @@ def creation_quartiles(data,breaks):
     return per
 
 
-def preprocessing_signal(df,e):
+def preprocessing_signal(df, e):
     u = df[df['patient_id'] == e]
     u.index = pd.to_datetime(u['new'])
     u = u['mean']
     u = u.resample('10T', offset='10s').mean().interpolate(method='slinear')
     u = u.dropna()
     return u
-def Application_ESAX(signal_preprocessed,wl,vocab,ws,break_points):
-    u=signal_preprocessed
+
+
+def Application_ESAX(signal_preprocessed, wl, vocab, ws, break_points):
+    u = signal_preprocessed
     u.index = pd.arrays.DatetimeArray(u.index, dtype=np.dtype("<M8[ns]"), freq=None, copy=False)
     ts_subs, startpoints, indexes_subs = subs.get_subsequences(u, resolution=ws)
     try:
@@ -69,6 +71,7 @@ def Application_ESAX(signal_preprocessed,wl,vocab,ws,break_points):
                                       mask_size=2, mdr=2.5, cr1=5, cr2=1.5, per=break_points)
     except:
         print('Error')
+
     if wl == 3:
         ESAX = found_motifs['ts_sax_df'][0] + found_motifs['ts_sax_df'][1] + found_motifs['ts_sax_df'][2]
     elif wl == 4:
@@ -104,28 +107,29 @@ def Main_ESAX(df,wl,vocab,ws,test_s=0.2,seed=1):
     emb=[]
     Quartiles=[]
     valores=[]
-    pd1 = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_RAW, 'BPtRoster.txt'), sep='|')
+    pd1 = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED, 'BPtRoster.txt'), sep='|')
     pd1['BCaseControlStatus'] = pd1['BCaseControlStatus'].replace(['Case'], 0).replace(['Control'], 1)
     pd1['label_encoded'] = pd1['BCaseControlStatus']
     pd1.drop(['RecID', 'BCaseControlStatus'], axis=1, inplace=True)
     patients = get_patients_id()
     data = patients.merge(pd1, on=['PtID'])
-    X_train, X_test, Y_train, Y_test = train_test_split(data['PtID'], data['label_encoded'], test_size=test_s, random_state=seed,
+    X_train, X_test, Y_train, Y_test = train_test_split(data['PtID'], data['label_encoded'], test_size=test_s,
+                                                        random_state=seed,
                                                         stratify=data['label_encoded'])
     for e in X_train.values:
-        u=preprocessing_signal(df,e)
+        u = preprocessing_signal(df, e)
         valores.extend(u.values)
-    break_points=creation_quartiles(valores, vocab)
+    break_points = creation_quartiles(valores, vocab)
 
     for e in patients['PtID']:
-        u=preprocessing_signal(df,e)
-        ESAX,found_motifs=Application_ESAX(u,wl,vocab,ws,break_points)
-        ESAX=Counting_wors_hypo(ESAX, found_motifs, e,seed)
-        text= ' '.join(ESAX['Word'].tolist())
+        u = preprocessing_signal(df, e)
+        ESAX, found_motifs=Application_ESAX(u,wl,vocab,ws,break_points)
+        ESAX = Counting_wors_hypo(ESAX, found_motifs, e,seed)
+        text = ' '.join(ESAX['Word'].tolist())
         emb.append(text)
-    data= pd.DataFrame(emb, columns=['text'+ str(seed)])
+    data = pd.DataFrame(emb, columns=['text' + str(seed)])
     data['PtID'] = patients['PtID']
-    data= data.merge(pd1, on='PtID')
+    data = data.merge(pd1, on='PtID')
     return data
 
 def Contar_hypo(seed):
@@ -163,19 +167,20 @@ def Contar_hypo(seed):
 
     return df_hypo_final
 
-def gSAX_application(df,window_size,length_word,vocabulary,tfidf_size):
+
+def gSAX_application(df, window_size, length_word, vocabulary, tfidf_size):
     for w in window_size:
         for l in length_word:
             if l <= w:
                 for v in vocabulary:
                     data_final = pd.DataFrame()
                     for s in consts.SEEDS:
-                        data=Main_ESAX(df,l,v,w,seed=s)
+                        data = Main_ESAX(df, l, v, w, seed=s)
                         try:
-                            data2=data.drop(['label_encoded'],axis=1)
+                            data2 = data.drop(['label_encoded'], axis=1)
                             data_final = data_final.merge(data2, on=['PtID'])
                         except KeyError:
-                            data_final =data
+                            data_final = data
 
                         df_hypo_final = Contar_hypo(s)
                         df_hypo_final.astype(float).to_csv(
@@ -196,15 +201,16 @@ def gSAX_application(df,window_size,length_word,vocabulary,tfidf_size):
                                                         'Metrics_' + str(t) + '_' + str(w) + '_' + str(
                                                             l) + '_' + str(v) + '.csv'))
 
+
 def Signal_FS(data_final):
 
-    u=relief_bbdd(data_final, data_final['label_encoded'],'Signal',path=consts.PATH_PROJECT_REPORTS_SIGNAL ,FS=True)
+    u = relief_bbdd(data_final, data_final['label_encoded'], 'Signal', path=consts.PATH_PROJECT_REPORTS_SIGNAL, FS=True)
     plt.close()
-    u=relief_bbdd(data_final, data_final['label_encoded'],'Signal',path=consts.PATH_PROJECT_REPORTS_SIGNAL ,FS=5)
+    u = relief_bbdd(data_final, data_final['label_encoded'], 'Signal', path=consts.PATH_PROJECT_REPORTS_SIGNAL, FS=5)
 
-    o=call_clfs(data_final, data_final['label_encoded'],'Signal',u, 0.2,tfidf=100)
+    o = call_clfs(data_final, data_final['label_encoded'], 'Signal', u, 0.2, tfidf=100)
 
-    o.to_csv(os.path.join(consts.PATH_PROJECT_REPORTS_SIGNAL ,'Metrics_FS_'+str(8)+'_'+str(6)+'_'+str(3)+'_'+str(10)+'.csv'))
+    o.to_csv(os.path.join(consts.PATH_PROJECT_REPORTS_SIGNAL, 'Metrics_FS_'+str(8)+'_'+str(6)+'_'+str(3)+'_'+str(10)+'.csv'))
 
 
 def plot_freq_TS():

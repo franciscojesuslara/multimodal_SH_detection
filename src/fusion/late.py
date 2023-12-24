@@ -8,6 +8,8 @@ from utils.check_patients import get_patients_id
 from utils.FS_bbdd import relief_bbdd
 from utils.classifiers import call_best_clfs,call_models_fusion
 import math
+
+
 def late_fusion(databases_list,
                 classifiers=['knn'],
                 partition=0.8,
@@ -21,7 +23,7 @@ def late_fusion(databases_list,
          'Signal', 'Unaware'])
     z = math.ceil(partition * len(patients))
     print('num. patients: ', len(patients))
-    y =  len(patients)-z
+    y = len(patients)-z
 
     databases_list.append('label')
     df_train1 = pd.DataFrame([[0] * x] * y, columns=databases_list)
@@ -113,7 +115,7 @@ def late_fusion(databases_list,
         X = df1.drop(['label_encoded', 'PtID'], axis=1)
 
         if len(features_selected) > 0:
-            features= relief_bbdd(X, Y, e, test_s=0.2,FS=features_selected[j] , path=paths)
+            features= relief_bbdd(X, Y, e, test_s=0.2,FS=features_selected[j], path=paths)
 
             list_pred_train, list_pred_test, list_y_train, list_y_test = call_best_clfs(X, Y, e, features,
                                                                                         [classifiers[j]], z,300)

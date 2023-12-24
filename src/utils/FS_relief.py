@@ -9,7 +9,6 @@ import pandas as pd
 import warnings
 warnings.filterwarnings('ignore')
 import matplotlib.pyplot as plt
-import seaborn as sns
 warnings.filterwarnings('ignore')
 import nltk
 from sklearn.feature_extraction.text import CountVectorizer,TfidfVectorizer

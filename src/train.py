@@ -1,4 +1,6 @@
 import os
+import time
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from utils.plotter import lollipop_plot
@@ -44,6 +46,10 @@ if args.type_data == 'unimodal':
         tabular_classification(databases_list, features_selected=FS, paths=consts.PATH_PROJECT_TABULAR_METRICS)
 
     elif args.type_modality == 'time_series':
+
+        # CGM_preprocessing()
+        # time.sleep(80)
+
         df = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_CGM.csv'))
         gSAX_application(df, [3], [3], [7], [80])
         gSAX_application(df, [6], [5], [10], [80])

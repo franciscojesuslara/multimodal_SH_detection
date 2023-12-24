@@ -313,7 +313,6 @@ def get_motifs(data, ts_subs, breaks, word_length, num_iterations, mdr, cr1, cr2
     ecdf_df["x"] = ecdf[0]
     ecdf_df["y"] = ecdf[1]
 
-
     # Set parameters for the eSAX algorithm
     # NOTE: According to Nicole Ludwig, these parameters were set based on experience and turned out to be the best
     # working ones across 2-3 data sets (e.g. count ratios have high influence but she found a good trade-off)
