@@ -6,7 +6,14 @@ Multimodal severe hypoglycemia detection
 Install libraries for project.
 ```console
 pip install -r requirements.txt 
+pip install git+https://github.com/cdchushig/scikit-rebate.git@1efbe530a46835c86f2e50f17342541a3085be9c
 ```
+
+If have any issue with skrebate, please install the following modified version:
+```console
+pip install git+https://github.com/cdchushig/scikit-rebate.git@1efbe530a46835c86f2e50f17342541a3085be9c
+```
+
 
 ## Download data and copy to project
 Preprocessed data are available in:
@@ -19,28 +26,28 @@ After downloading data, you have to put folders and files in data/preprocessed
 
 For results using tabular data:
 ```console
-python src/main.py --type_data='unimodal' --type_modality='tabular'
+python src/train.py --type_data='unimodal' --type_modality='tabular'
 ```
 
 For results using time series:
 ```console
-python src/main.py --type_data='unimodal' --type_modality='time_series'
+python src/train.py --type_data='unimodal' --type_modality='time_series'
 ```
 
 For results using text:
 ```console
-python src/main.py --type_data='unimodal' --type_modality='text'
+python src/train.py --type_data='unimodal' --type_modality='text'
 ```
 
 ## To obtain results of models using multi-modality data
 
 For results with early fusion:
 ```console
-python src/main.py --type_data='multimodal' --type_fusion='early'
+python src/train.py --type_data='multimodal' --type_fusion='early'
 ```
 
 For results with late fusion:
 ```console
-python src/main.py --type_data='multimodal' --type_fusion='late'
+python src/train.py --type_data='multimodal' --type_fusion='late'
 ```
 
