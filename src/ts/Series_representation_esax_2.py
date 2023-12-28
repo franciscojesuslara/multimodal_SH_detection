@@ -205,7 +205,7 @@ def gSAX_application(df, window_size, length_word, vocabulary, tfidf_size):
                         # print('AUC_ROC MAX:', metrics[metrics['metric'] == 'auc_roc']['mean'].max())
                         # if metrics[metrics['metric'] == 'auc_roc']['mean'].max() > 0.6:
                         #     print(metrics[metrics['metric'] == 'auc_roc']['mean'].max())
-                        metrics.to_csv(os.path.join(consts.PATH_PROJECT_REPORTS, 'time series',
+                        metrics.to_csv(os.path.join(consts.PATH_PROJECT_REPORTS, 'time_series',
                                                         'Metrics_' + str(t) + '_' + str(w) + '_' + str(
                                                             l) + '_' + str(v) + '.csv'))
 
