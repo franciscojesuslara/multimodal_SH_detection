@@ -66,11 +66,13 @@ def Application_ESAX(signal_preprocessed, wl, vocab, ws, break_points):
     u = signal_preprocessed
     u.index = pd.arrays.DatetimeArray(u.index, dtype=np.dtype("<M8[ns]"), freq=None, copy=False)
     ts_subs, startpoints, indexes_subs = subs.get_subsequences(u, resolution=ws)
-    try:
-        found_motifs = mot.get_motifs(u, ts_subs, breaks=vocab, word_length=wl, num_iterations=50,
-                                      mask_size=2, mdr=2.5, cr1=5, cr2=1.5, per=break_points)
-    except:
-        print('Error')
+    # try:
+    found_motifs = mot.get_motifs(u, ts_subs, breaks=vocab, word_length=wl, num_iterations=50,
+                                  mask_size=2, mdr=2.5, cr1=5, cr2=1.5,
+                                  per=break_points
+                                  )
+    # except:
+    #     print('Error')
 
     if wl == 3:
         ESAX = found_motifs['ts_sax_df'][0] + found_motifs['ts_sax_df'][1] + found_motifs['ts_sax_df'][2]
@@ -103,17 +105,19 @@ def Counting_wors_hypo(ESAX,found_motifs,ID,seed):
     data1.to_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, str(ID) + '_seed_'+str(seed)+'.csv'))
     return ESAX
 
-def Main_ESAX(df,wl,vocab,ws,test_s=0.2,seed=1):
-    emb=[]
-    Quartiles=[]
-    valores=[]
+
+def Main_ESAX(df, wl, vocab, ws, test_s=0.2, seed=1):
+    emb = []
+    Quartiles = []
+    valores = []
     pd1 = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED, 'BPtRoster.txt'), sep='|')
     pd1['BCaseControlStatus'] = pd1['BCaseControlStatus'].replace(['Case'], 0).replace(['Control'], 1)
     pd1['label_encoded'] = pd1['BCaseControlStatus']
     pd1.drop(['RecID', 'BCaseControlStatus'], axis=1, inplace=True)
     patients = get_patients_id()
     data = patients.merge(pd1, on=['PtID'])
-    X_train, X_test, Y_train, Y_test = train_test_split(data['PtID'], data['label_encoded'], test_size=test_s,
+    X_train, X_test, Y_train, Y_test = train_test_split(data['PtID'], data['label_encoded'],
+                                                        test_size=test_s,
                                                         random_state=seed,
                                                         stratify=data['label_encoded'])
     for e in X_train.values:
@@ -123,8 +127,8 @@ def Main_ESAX(df,wl,vocab,ws,test_s=0.2,seed=1):
 
     for e in patients['PtID']:
         u = preprocessing_signal(df, e)
-        ESAX, found_motifs=Application_ESAX(u,wl,vocab,ws,break_points)
-        ESAX = Counting_wors_hypo(ESAX, found_motifs, e,seed)
+        ESAX, found_motifs = Application_ESAX(u, wl, vocab, ws, break_points)
+        ESAX = Counting_wors_hypo(ESAX, found_motifs, e, seed)
         text = ' '.join(ESAX['Word'].tolist())
         emb.append(text)
     data = pd.DataFrame(emb, columns=['text' + str(seed)])
@@ -132,32 +136,36 @@ def Main_ESAX(df,wl,vocab,ws,test_s=0.2,seed=1):
     data = data.merge(pd1, on='PtID')
     return data
 
+
 def Contar_hypo(seed):
-    Base_de_datos = ['Unaware','Fear','BTOTSCORE','BSample','Attitude','Lifestyle','MOCA','Depression','Conditions','Medications','Signal']
-    pd1=pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_RAW,'BPtRoster.txt'),sep='|')
-    pd1['BCaseControlStatus']=pd1['BCaseControlStatus'].replace(['Case'], 0).replace(['Control'], 1)
+    Base_de_datos = ['Unaware', 'Fear', 'BTOTSCORE', 'BSample', 'Attitude', 'Lifestyle', 'MOCA',
+                     'Depression', 'Conditions', 'Medications', 'Signal']
+    pd1=pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED, 'BPtRoster.txt'), sep='|')
+    pd1['BCaseControlStatus'] = pd1['BCaseControlStatus'].replace(['Case'], 0).replace(['Control'], 1)
     pd1['label_encoded'] = pd1['BCaseControlStatus']
-    pd1.drop(['RecID','BCaseControlStatus'], axis=1, inplace=True)
+    pd1.drop(['RecID', 'BCaseControlStatus'], axis=1, inplace=True)
     patients = get_patients_id(Base_de_datos)
     data = patients.merge(pd1, on=['PtID'])
     df_hypo = pd.DataFrame()
     df_no_hypo = pd.DataFrame()
-    for e, j in enumerate (data['label_encoded']):
+    for e, j in enumerate(data['label_encoded']):
         if j == 0:
-            df=pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,str(data['PtID'].iloc[e]) + '_seed_'+str(seed)+'.csv'))
-            df_hypo=pd.concat([df,df_hypo])
+            df = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,
+                                          str(data['PtID'].iloc[e]) + '_seed_'+str(seed)+'.csv'))
+            df_hypo = pd.concat([df, df_hypo])
         else:
-            df = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, str(data['PtID'].iloc[e]) + '_seed_'+str(seed)+'.csv'))
+            df = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,
+                                          str(data['PtID'].iloc[e]) + '_seed_'+str(seed)+'.csv'))
             df_no_hypo = pd.concat([df, df_no_hypo])
-    df_no_hypo=df_no_hypo.drop(['Unnamed: 0'],axis=1)
-    df_hypo=df_hypo.drop(['Unnamed: 0'],axis=1)
-    df_hypo=df_hypo.groupby(by='Word').sum()
-    df_no_hypo=df_no_hypo.groupby(by='Word').sum()
-    df_hypo['Percent_hypo']=round(100*df_hypo['Hypo']/df_hypo['Number'],2)
-    df_no_hypo['Percent_no_hypo']=round(100*df_no_hypo['Hypo']/df_no_hypo['Number'],2)
-    df_hypo.columns = ['Episodes of Hypo in severe','Number in severe','Percent episodes of hypo in severe']
-    df_no_hypo.columns =['Episodes of Hypo in control','Number in control','Percent episodes of hypo in control']
-    df_hypo_final=df_hypo.join(df_no_hypo)
+    df_no_hypo = df_no_hypo.drop(['Unnamed: 0'], axis=1)
+    df_hypo = df_hypo.drop(['Unnamed: 0'], axis=1)
+    df_hypo = df_hypo.groupby(by='Word').sum()
+    df_no_hypo = df_no_hypo.groupby(by='Word').sum()
+    df_hypo['Percent_hypo'] = round(100*df_hypo['Hypo']/df_hypo['Number'],2)
+    df_no_hypo['Percent_no_hypo'] = round(100*df_no_hypo['Hypo']/df_no_hypo['Number'],2)
+    df_hypo.columns = ['Episodes of Hypo in severe', 'Number in severe', 'Percent episodes of hypo in severe']
+    df_no_hypo.columns =['Episodes of Hypo in control', 'Number in control', 'Percent episodes of hypo in control']
+    df_hypo_final = df_hypo.join(df_no_hypo)
     print(len(df_hypo_final))
     df_hypo_final['Difference in Number'] = df_hypo_final['Number in severe'] - df_hypo_final['Number in control']
     df_hypo_final['Difference in percentage'] = abs(df_hypo_final['Percent episodes of hypo in severe'] - df_hypo_final[

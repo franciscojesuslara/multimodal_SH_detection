@@ -23,7 +23,7 @@ coloredlogs.install(level='DEBUG', logger=logger)
 
 def parse_arguments(parser):
     parser.add_argument('--type_data', default='unimodal', type=str)
-    parser.add_argument('--type_modality', default='tabular', type=str)
+    parser.add_argument('--type_modality', default='time_series', type=str)
     parser.add_argument('--type_fusion', default='early', type=str)
     parser.add_argument('--preprocessing_data', default=False, type=bool)
     return parser.parse_args()
@@ -46,9 +46,6 @@ if args.type_data == 'unimodal':
         tabular_classification(databases_list, features_selected=FS, paths=consts.PATH_PROJECT_TABULAR_METRICS)
 
     elif args.type_modality == 'time_series':
-
-        # CGM_preprocessing()
-        # time.sleep(80)
 
         df = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_CGM.csv'))
         gSAX_application(df, [3], [3], [7], [80])

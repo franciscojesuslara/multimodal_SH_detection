@@ -295,20 +295,23 @@ def divide_period(df_ts):
                 second_period = pd.concat([second_period, p[1]])
     return first_period.reset_index(drop=True), second_period.reset_index(drop=True)
 
+
 def preprocess_raw_cgm():
     df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BDataCGM.csv'), sep='|')
     df_ts = create_sequence_by_columns(df_ts)
-    df_ts=df_ts.sort_values(by=['PtID', 'sequence']).reset_index(drop=True)
+    df_ts = df_ts.sort_values(by=['PtID', 'sequence']).reset_index(drop=True)
 
-    df1,df2 = divide_period(df_ts)
+    df1, df2 = divide_period(df_ts)
     df_ts_pre = rescale_days(df1)
     df_ts_post = build_datestamp(df_ts_pre)
-    df_ts_post.to_csv(os.path.join(PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,'BG_period_1.csv'), index=False)
+    df_ts_post.to_csv(os.path.join(PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BG_period_1.csv'), index=False)
 
     df_ts_pre = rescale_days(df2)
     df_ts_post2 = build_datestamp(df_ts_pre)
-    df_ts_post2.to_csv(os.path.join(PATH_PROJECT_DATA_PREPROCESSED_SIGNAL,'BG_period_2.csv'), index=False)
-    return df_ts_post,df_ts_post2
+    df_ts_post2.to_csv(os.path.join(PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BG_period_2.csv'), index=False)
+
+    return df_ts_post, df_ts_post2
+
 
 def create_datetime_cgm(df_ts: pd.DataFrame) -> pd.DataFrame:
     df_ts = create_sequence_by_columns(df_ts)
@@ -331,7 +334,7 @@ def preprocess_cgm_new_freq(df_ts: pd.DataFrame, df_selected_seqs: pd.DataFrame,
     df_concat = pd.concat(list_dfs)
 
     return df_concat
-df1,df2=preprocess_raw_cgm()
+
 
 # print(df_ts)
 
@@ -342,6 +345,8 @@ df1,df2=preprocess_raw_cgm()
 
 
 def CGM_preprocessing():
+    df1, df2 = preprocess_raw_cgm()
+
     df_ts = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'BDataCGM.csv'), sep='|')
     list_ids = df_ts['PtID'].unique().tolist()
     # for e in LIST_PATIENT_IDS_REMOVED:
@@ -360,14 +365,15 @@ def CGM_preprocessing():
             # print('id',e,': ','period1:',len(df_concat[df_concat['patient_id']== e]),'period2:',len(df_concat2[df_concat2['patient_id']== e]))
             if len(df_concat[df_concat['patient_id'] == e]) < 504:
                 id_removed.append(e)
-            df_final=pd.concat([df_final, df_concat[df_concat['patient_id'] == e]])
+            df_final = pd.concat([df_final, df_concat[df_concat['patient_id'] == e]])
         else:
             # print('id',e,': ','period1:',len(df_concat[df_concat['patient_id']== e]),'period2:',len(df_concat2[df_concat2['patient_id']== e]))
             if len(df_concat2[df_concat2['patient_id'] == e]) < 504:
                 id_removed.append(e)
             df_final = pd.concat([df_final, df_concat2[df_concat2['patient_id'] == e]])
+
     df_final = df_final[~df_final['patient_id'].isin(id_removed)]
-    df_final.to_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_Text.csv'))
+    df_final.to_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'Time_series_CGM.csv'))
 # print(df_concat)
 
 # print(df_ts_post)
