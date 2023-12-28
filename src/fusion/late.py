@@ -105,7 +105,7 @@ def late_fusion(databases_list,
             # df1 = df1.sort_values('PtID')
 
         elif e == 'Signal':
-            df1 = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'ESAX.csv'))
+            df1 = pd.read_csv(os.path.join(consts.PATH_PROJECT_DATA_PREPROCESSED_SIGNAL, 'gSAX.csv'))
             df1 = patients.merge(df1, on=['PtID'])
             # df1 = df1.sort_values('PtID')
 
