@@ -276,7 +276,7 @@ def extract_motif_pair(ts_sax_df, col_mat, ts_subs, num_iterations, count_ratio_
     return indices
 
 
-def get_motifs(data, ts_subs, breaks, word_length, num_iterations, mdr, cr1, cr2, mask_size=2, seed=42):
+def get_motifs(data, ts_subs, breaks, word_length, num_iterations, mdr, cr1, cr2, mask_size=2, seed=42, per='Individual'):
     """
     This method combines all previous steps to extract the motifs.
 
@@ -313,6 +313,7 @@ def get_motifs(data, ts_subs, breaks, word_length, num_iterations, mdr, cr1, cr2
     ecdf_df["x"] = ecdf[0]
     ecdf_df["y"] = ecdf[1]
 
+
     # Set parameters for the eSAX algorithm
     # NOTE: According to Nicole Ludwig, these parameters were set based on experience and turned out to be the best
     # working ones across 2-3 data sets (e.g. count ratios have high influence but she found a good trade-off)
@@ -328,51 +329,55 @@ def get_motifs(data, ts_subs, breaks, word_length, num_iterations, mdr, cr1, cr2
     # Set the number of breakpoints (percentiles)
     qq = np.linspace(start=0, stop=1, num=breaks + 1)
 
-    # Store the percentiles
-    per = np.quantile(ecdf_df["x"], qq)
+    if per == 'Individual':
+        # Store the percentiles
+        per = np.quantile(ecdf_df["x"], qq)
 
-    # Use only unique percentiles for the alphabet distribution
-    per = np.unique(per)
+        # Use only unique percentiles for the alphabet distribution
+        per = np.unique(per)
 
-    # Add the minimum as the lowest letter
-    minimum = min([i.min() for i in ts_subs])
-    per[0] = minimum
+        # Add the minimum as the lowest letter
+        minimum = min([i.min() for i in ts_subs])
+        per[0] = minimum
 
     # Set parameters for the random projection and motif candidates
-    max_length = (max(lengths) * 0.1).__round__()
+    # max_length = (max(lengths) * 0.1).__round__()
+    #
+    # if num_iterations == 0:
+    #     num_iterations = min(max_length, round(word_length / 10))
+    #
+    # # Create eSAX time Series
 
-    if num_iterations == 0:
-        num_iterations = min(max_length, round(word_length / 10))
-
-    # Create eSAX time Series
     ts_sax_df, pieces_all = create_esax_time_series(ts_subs, word_length, per)
 
+    found_motifs = {'ts_subs': ts_subs, 'ts_sax_df': ts_sax_df, 'quartiles':per}
+
     # Perform the random projection
-    col_mat = perform_random_projection(ts_sax_df, num_iterations, mask_size, seed)
+    # col_mat = perform_random_projection(ts_sax_df, num_iterations, mask_size, seed)
 
-    # Extract motif candidates
-    indexes = extract_motif_pair(ts_sax_df, col_mat, ts_subs, num_iterations, cr1, cr2, mdr)
-
-    motifs_raw = []
-    motifs_sax = []
-    ts_raw_df = pd.DataFrame(ts_subs, index=ts_sax_df.index, dtype=float)
-
-    for val in indexes:
-        motifs_raw.append(ts_raw_df.loc[val])
-        motifs_sax.append(ts_sax_df.loc[val])
-
-    motifs_raw.sort(key=lambda x: x.shape[0], reverse=True)
-    motifs_sax.sort(key=lambda x: x.shape[0], reverse=True)
-
-    # update list of index tuples after sorting
-    indexes = [val.index for val in motifs_raw]
-
-    found_motifs = {'ts_subs': ts_subs, 'ts_sax_df': ts_sax_df, 'motifs_raw': motifs_raw,
-                    'motifs_sax': motifs_sax, 'col_mat': col_mat, 'indexes': indexes,
-                    'pieces_all': pieces_all, 'ecdf': ecdf}
-
-    logger.info("Done")
-
+    # # Extract motif candidates
+    # indexes = extract_motif_pair(ts_sax_df, col_mat, ts_subs, num_iterations, cr1, cr2, mdr)
+    # indexes= list(indexes[0])
+    #
+    # motifs_raw = []
+    # motifs_sax = []
+    # ts_raw_df = pd.DataFrame(ts_subs, index=ts_sax_df.index, dtype=float)
+    #
+    # for val in indexes:
+    #     motifs_raw.append(ts_raw_df.loc[val])
+    #     motifs_sax.append(ts_sax_df.loc[val])
+    #
+    # motifs_raw.sort(key=lambda x: x.shape[0], reverse=True)
+    # motifs_sax.sort(key=lambda x: x.shape[0], reverse=True)
+    #
+    # # update list of index tuples after sorting
+    # indexes = [val.index for val in motifs_raw]
+    #
+    # found_motifs = {'ts_subs': ts_subs, 'ts_sax_df': ts_sax_df, 'motifs_raw': motifs_raw,
+    #                 'motifs_sax': motifs_sax, 'col_mat': col_mat, 'indexes': indexes,
+    #                 'pieces_all': pieces_all, 'ecdf': ecdf,'quartiles':per}
+    #
+    # logger.info("Done")
     return found_motifs
 
 

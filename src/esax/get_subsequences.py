@@ -131,7 +131,7 @@ def get_subsequences(data, resolution):
     # Create the subsequences with day or subday patterns
 
     # Calculate how many measuring intervals fit in one day (in seconds)
-    window = round(24 / resolution)
+    window = resolution
 
     # Get sequences and store the start points and sequences separately to avoid lists of lists
     # TODO: only 'none' is working at the moment
