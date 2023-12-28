@@ -276,7 +276,8 @@ def extract_motif_pair(ts_sax_df, col_mat, ts_subs, num_iterations, count_ratio_
     return indices
 
 
-def get_motifs(data, ts_subs, breaks, word_length, num_iterations, mdr, cr1, cr2, mask_size=2, seed=42, per='Individual'):
+def get_motifs(data, ts_subs, breaks, word_length, num_iterations, mdr, cr1, cr2, mask_size=2, seed=42,
+               per='Individual'):
     """
     This method combines all previous steps to extract the motifs.
 
