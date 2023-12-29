@@ -16,14 +16,14 @@ from utils.check_patients import get_patients_id
 import utils.consts as consts
 from  utils.FS_relief import relief_fusion
 import math
-def main_early_fusion(x_features, y_label, names, test_s):
+def main_early_fusion(x_features, y_label, names, test_s,tfidf=10):
     list_x_train = []
     list_x_test = []
     list_y_train = []
     list_y_test = []
 
     for i in consts.SEEDS:
-        x_train, x_test,Y_train, Y_test = Preprocessing_function(x_features, y_label,i,names,test_s,10)
+        x_train, x_test,Y_train, Y_test = Preprocessing_function(x_features, y_label,i,names,test_s,tfidf)
         list_x_train.append(x_train)
         list_x_test.append(x_test)
         list_y_test.append(Y_test)
@@ -608,13 +608,15 @@ def early_fusion(databases_list, partition=0.2, FS=[]):
 
         Y = df1['label_encoded']
         X = df1.drop(['label_encoded'], axis=1)
+        list_data.append(X)
         if len(FS) > 0:
             features=relief_bbdd(X, Y, e, test_s=z,FS=FS[j],path=consts.PATH_PROJECT_TABULAR_METRICS)
             for u in list(features):
                 features_final.append(u)
-        list_data.append(X)
-
-    list_pred_train, list_pred_test, list_y_train, list_y_test = main_early_fusion(list_data, Y, databases_list, z)
+            list_pred_train, list_pred_test, list_y_train, list_y_test = main_early_fusion(list_data, Y, databases_list,
+                                                                                           z, 300)
+        else:
+            list_pred_train, list_pred_test, list_y_train, list_y_test = main_early_fusion(list_data, Y, databases_list, z,10)
     if len(FS) > 0:
         print(len(features_final))
         df_train1 = list_pred_train[0][features_final]
@@ -671,6 +673,6 @@ def classifier_early(train, test, clfs=list_clfs, FS=False,save_path=consts.PATH
         return df
     else:
         df = call_models_fusion(train, test, list_clfs=clfs)
-        df.to_csv(os.path.join(save_path,'Early_'+str(len(train[0].columns)-1)+'_'+str(FS)+'2.csv'))
+        df.to_csv(os.path.join(save_path,'Early_'+str(len(train[0].columns)-1)+'_'+str(FS)+'.csv'))
         return df
 
