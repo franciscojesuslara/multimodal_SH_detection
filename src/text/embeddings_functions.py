@@ -28,9 +28,9 @@ def main_function(df_data, var_name='raw_medcon', encoding='tfidf', classifiers=
     list_mae_test = []
     list_mae_train = []
     for idx in range(len(consts.SEEDS)):
-        x_train,x_test,y_train,y_test= Embedded_text(df_data, var_name, encoding,
+        x_train, x_test, y_train, y_test = Embedded_text(df_data, var_name, encoding,
                       ngrams, embedding_size,
-                      Reduction, consts.SEEDS[idx],0.2, y_label, kernelKPCA, FS,
+                      Reduction, consts.SEEDS[idx], 0.2, y_label, kernelKPCA, FS,
                       path)
         # df_train = pd.concat([x_train, y_train.reset_index(drop=True)], axis=1)
         # df_test = pd.concat([x_test, y_test.reset_index(drop=True)], axis=1)
@@ -45,7 +45,8 @@ def main_function(df_data, var_name='raw_medcon', encoding='tfidf', classifiers=
                 hyperparameter_space = {
                     'alpha': np.logspace(-6, 3, 10)
                 }
-                grid_cv = GridSearchCV(estimator=model_lasso, param_grid=hyperparameter_space, scoring='roc_auc', cv=5)
+                grid_cv = GridSearchCV(estimator=model_lasso, param_grid=hyperparameter_space, scoring='roc_auc',
+                                       cv=5, n_jobs=-1)
                 grid_cv.fit(x_train, y_train)
 
                 clf_model = grid_cv.best_estimator_
@@ -198,7 +199,7 @@ def Embeddings(Database, var_name, classifier,metrics,encoding, ngrams=1, Reduct
         list_error_train = []
         for i in metrics:
             print('--' + str(i) + '--')
-            acc, acc_std, recall, recall_std, roc, roc_std, spec, spec_std, error_test, error_train= main_function(
+            acc, acc_std, recall, recall_std, roc, roc_std, spec, spec_std, error_test, error_train = main_function(
                 Database, var_name, encoding=t, classifiers=classifier, ngrams=ngrams, embedding_size=int(i),
                 Reduction=Reduction_model,kernelKPCA=kernel_KPCA,FS=FS,path= path)
             ROC[i] = np.asarray([roc, roc_std]).T.tolist()

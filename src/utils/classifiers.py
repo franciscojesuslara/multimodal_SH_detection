@@ -23,7 +23,10 @@ def train_compute_metrics(classifier: str,
                           x_train: np.array, y_train: np.array,
                           x_test: np.array, y_test: np.array,
                           seed: int,
-                          partitions=False,SHAP=False,ALE=False):
+                          partitions=False,
+                          SHAP=False,
+                          ALE=False
+                          ):
 
     selected_clf = None
     param_grid = {}

@@ -10,6 +10,8 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from utils.Embedding_text import Embedded_text
+
+
 def preprocessing_function(x_features, y_label, i, bbdd_name, test_s, tfidf=10):
 
     def var_categ_train(variable, X_train):

@@ -85,24 +85,31 @@ def pretrained_models_load(df_data,encoding):
     return sentence_embeddings
 
 
-def Embedded_text(df_data, var_name='raw_medcon', encoding='tfidf',
-                  ngrams=1, embedding_size=50,
-                  Reduction='None',seed=0,partition=0.2,label='',kernel_KPCA='poly',Feature_selection= False,path=consts.PATH_PROJECT_TEXT_METRICS):
+def Embedded_text(df_data,
+                  var_name='raw_medcon',
+                  encoding='tfidf',
+                  ngrams=1,
+                  embedding_size=50,
+                  Reduction='None',
+                  seed=0,
+                  partition=0.2,
+                  label='',
+                  kernel_KPCA='poly',
+                  Feature_selection= False,
+                  path=consts.PATH_PROJECT_TEXT_METRICS):
 
     bow_vectorizer = CountVectorizer(ngram_range=(1, ngrams), max_features=embedding_size)
 
     tfidf_vectorizer = TfidfVectorizer(ngram_range=(1, ngrams), max_features=embedding_size)
 
     y_label = label
-    df_data=df_data[var_name].tolist()
+    df_data = df_data[var_name].tolist()
     if encoding != 'tfidf' and encoding != 'mbow' and encoding != 'w2vec' and encoding != 'fasttext':
-        df_data=pretrained_models_load(df_data, encoding)
+        df_data = pretrained_models_load(df_data, encoding)
 
     list_mae_test = []
     list_mae_train = []
     x_train, x_test, y_train, y_test = train_test_split(pd.DataFrame(df_data), y_label,stratify=y_label, random_state=seed, test_size=partition)
-
-
 
     if encoding == 'tfidf':
         # x_train = pd.DataFrame(x_train)
@@ -148,7 +155,7 @@ def Embedded_text(df_data, var_name='raw_medcon', encoding='tfidf',
             x_test = mo.transform(x_test)
         elif Reduction == 'UMAP':
             mo = umap.UMAP(n_neighbors=5,min_dist=0.01,n_components=3,random_state=0)
-            mo = mo.fit(x_train,y= y_train)
+            mo = mo.fit(x_train, y=y_train)
             x_train = mo.transform(x_train)
             x_test = mo.transform(x_test)
     names = []
@@ -156,10 +163,11 @@ def Embedded_text(df_data, var_name='raw_medcon', encoding='tfidf',
         names.append(str(var_name) + '_' + str(e))
     x_train = pd.DataFrame(x_train, columns=names)
     x_test = pd.DataFrame(x_test, columns=names)
+
     if Feature_selection!= False:
-        features=FS_text_fuction(df_data, var_name, y_label, encoding, Reduction, ngrams, Feature_selection, kernel_KPCA, embedding_size, partition, path)
+        features = FS_text_fuction(df_data, var_name, y_label, encoding, Reduction, ngrams, Feature_selection, kernel_KPCA, embedding_size, partition, path)
         return x_train[features], x_test[features], y_train, y_test
     else:
-        return x_train,x_test,y_train,y_test
+        return x_train, x_test, y_train, y_test
 
 
