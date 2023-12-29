@@ -47,6 +47,11 @@ For results using time series:
 python src/train.py --type_data='unimodal' --type_modality='time_series'
 ```
 
+For preprocessing time series, run the following command:
+```console
+python src/preprocessing.py
+```
+
 For results using text:
 ```console
 python src/train.py --type_data='unimodal' --type_modality='text'
